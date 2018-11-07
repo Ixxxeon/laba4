@@ -79,7 +79,8 @@ public class Main extends JFrame{
         public void actionPerformed(ActionEvent arg0) {
             String user = logArea.getText();
             String password = pasArea.getText();
-            if(user.equals(null) || password.equals(null)){
+            if(user.equals("") || password.equals("")){
+                logi.append("Пустое имя пользователя или пароль" + "\n");
                 System.exit(2);
             }
             reg(user, password);
@@ -94,7 +95,8 @@ public class Main extends JFrame{
         public void actionPerformed(ActionEvent arg0) {
             String user = logArea.getText();
             String password = pasArea.getText();
-            if(user.equals(null) || password.equals(null)){
+            if(user.equals("") || password.equals("")){
+                logi.append("Пустое имя пользователя или пароль" + "\n");
                 System.exit(2);
             }
             log(user, password );
@@ -140,6 +142,7 @@ public class Main extends JFrame{
         srpServer.setSessionKey(true, srpClient.getPublicKey(), null);
         srpClient.setSessionKey(false, srpServer.getPublicKey(), srpServer.getScrambler());
         if(!(srpServer.getSessionKey().equals(srpClient.getSessionKey()))){
+            System.out.println("Не удалось сгенерировать общий ключ. Сеанс прерван");
             System.exit(3);
         }
 
@@ -182,6 +185,7 @@ public class Main extends JFrame{
         sIdentityHash = bytesToBig(hash(bigToByteArray(this.salt), hash(new String(user + ":" + password).getBytes())));
         sVerifier = this.generator_g.modPow(sIdentityHash, this.modulus_N);
         if(!(verify.equals(getVerifier()))){
+            System.out.println("Неверный пароль");
             System.exit(5);
         }
         privateKey = new BigInteger(128, new Random());
